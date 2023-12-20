@@ -18,16 +18,22 @@ def input_error(func):
 @input_error
 def handler_add(request):
     n_p = request.split(' ')
-    phone_dict.update({n_p[1]: n_p[2]})
-    answer = 'Added'
+    if n_p[1] not in phone_dict:
+        phone_dict.update({n_p[1]: n_p[2]})
+        answer = 'Added'
+    else:
+        answer = 'This name is already exist'
     return answer
 
 
 @input_error
 def handler_change(request):
     n_p = request.split(' ')
-    phone_dict[n_p[1]] = n_p[2]
-    answer = 'Changed'
+    if n_p[1] in phone_dict:
+        phone_dict[n_p[1]] = n_p[2]
+        answer = 'Changed'
+    else:
+        answer = 'This name is not exist'
     return answer
 
 
@@ -44,16 +50,16 @@ def main():
         request = input('')
         if request.lower() == 'hello':
             print('How can I help you?')
-        elif request.startswith('add'):
+        elif request.lower().startswith('add '):
             answer = handler_add(request)
             print(answer)
-        elif request.startswith('change'):
+        elif request.lower().startswith('change '):
             answer = handler_change(request)
             print(answer)
-        elif request.startswith('phone'):
+        elif request.lower().startswith('phone '):
             number = handler_phone(request)
             print(number)
-        elif request.startswith('show all'):
+        elif request.lower().startswith('show all'):
             print(phone_dict)
         elif request.lower().startswith(('good bye', 'close', 'exit')):
             print('Good bye!')
