@@ -44,26 +44,35 @@ def handler_phone(request):
     return number
 
 
+OPERATIONS = {
+            'add': handler_add,
+            'change': handler_change,
+            'phone': handler_phone
+        }
+
+
 def main():
 
     while True:
         request = input('')
-        if request.lower() == 'hello':
+        request = request.lower()
+        if request == 'hello':
             print('How can I help you?')
-        elif request.lower().startswith('add '):
-            answer = handler_add(request)
-            print(answer)
-        elif request.lower().startswith('change '):
-            answer = handler_change(request)
-            print(answer)
-        elif request.lower().startswith('phone '):
-            number = handler_phone(request)
-            print(number)
-        elif request.lower().startswith('show all'):
+        elif request.startswith('show all'):
             print(phone_dict)
-        elif request.lower().startswith(('good bye', 'close', 'exit')):
+        elif request.startswith(('good bye', 'close', 'exit')):
             print('Good bye!')
             return False
+        else:
+            handler = get_handler(request)
+            print(handler(request))
+
+
+def get_handler(request):
+    if request.split(' ')[0] in OPERATIONS:
+        return OPERATIONS[request.split(' ')[0]]
+    else:
+        return (lambda x: 'Give me correct command')
 
 
 if __name__ == '__main__':
